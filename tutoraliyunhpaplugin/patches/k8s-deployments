@@ -1,0 +1,114 @@
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-lms
+spec:
+  scaleTargetRef:
+    apiVersion: autoscaling.alibabacloud.com/v1beta1
+    kind: ElasticWorkload
+    name: elasticworkload-lms
+  minReplicas: {{ ALIYUNHPAPLUGIN_HPA_LMS_MIN_REPLICAS }}
+  maxReplicas: {{ ALIYUNHPAPLUGIN_HPA_LMS_MAX_REPLICAS }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ ALIYUNHPAPLUGIN_HPA_CPU_UTILIZATION }}
+---
+apiVersion: autoscaling.alibabacloud.com/v1beta1
+kind: ElasticWorkload
+metadata:
+  name: elasticworkload-lms
+spec:
+  sourceTarget:
+    name: lms
+    kind: Deployment
+    apiVersion: apps/v1
+    min: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_SOURCE_LMS_MIN_REPLICAS }}
+    max: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_SOURCE_LMS_MIN_REPLICAS }}
+  replicas: 1
+  elasticUnit:
+  - name: virtual-kubelet
+    labels:
+      alibabacloud.com/eci: "true"
+    min: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_VK_LMS_MIN_REPLICAS }}
+    max: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_VK_LMS_MAX_REPLICAS }}
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-cms
+spec:
+  scaleTargetRef:
+    apiVersion: autoscaling.alibabacloud.com/v1beta1
+    kind: ElasticWorkload
+    name: elasticworkload-cms
+  minReplicas: {{ ALIYUNHPAPLUGIN_HPA_CMS_MIN_REPLICAS }}
+  maxReplicas: {{ ALIYUNHPAPLUGIN_HPA_CMS_MAX_REPLICAS }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ ALIYUNHPAPLUGIN_HPA_CPU_UTILIZATION }}
+---
+apiVersion: autoscaling.alibabacloud.com/v1beta1
+kind: ElasticWorkload
+metadata:
+  name: elasticworkload-cms
+spec:
+  sourceTarget:
+    name: cms
+    kind: Deployment
+    apiVersion: apps/v1
+    min: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_SOURCE_CMS_MIN_REPLICAS }}
+    max: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_SOURCE_CMS_MIN_REPLICAS }}
+  replicas: 1
+  elasticUnit:
+  - name: virtual-kubelet
+    labels:
+      alibabacloud.com/eci: "true"
+    min: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_VK_CMS_MIN_REPLICAS }}
+    max: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_VK_CMS_MAX_REPLICAS }}
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-forum
+spec:
+  scaleTargetRef:
+    apiVersion: autoscaling.alibabacloud.com/v1beta1
+    kind: ElasticWorkload
+    name: elasticworkload-forum
+  minReplicas: {{ ALIYUNHPAPLUGIN_HPA_FORUM_MIN_REPLICAS }}
+  maxReplicas: {{ ALIYUNHPAPLUGIN_HPA_FORUM_MAX_REPLICAS }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ ALIYUNHPAPLUGIN_HPA_CPU_UTILIZATION }}
+---
+apiVersion: autoscaling.alibabacloud.com/v1beta1
+kind: ElasticWorkload
+metadata:
+  name: elasticworkload-forum
+spec:
+  sourceTarget:
+    name: forum
+    kind: Deployment
+    apiVersion: apps/v1
+    min: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_SOURCE_FORUM_MIN_REPLICAS }}
+    max: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_SOURCE_FORUM_MIN_REPLICAS }}
+  replicas: 1
+  elasticUnit:
+  - name: virtual-kubelet
+    labels:
+      alibabacloud.com/eci: "true"
+    min: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_VK_FORUM_MIN_REPLICAS }}
+    max: {{ ALIYUNHPAPLUGIN_ELASTICWORKLOAD_VK_FORUM_MAX_REPLICAS }}
